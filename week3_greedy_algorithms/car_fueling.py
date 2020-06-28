@@ -10,6 +10,8 @@ def compute_min_refills(distance, tank, stops):
         if (i+1) < len(stops) and tank >= stops[i] and tank < stops[i+1]:
             cnt += 1
             tank += stops[i]
+    if tank > distance:
+        return 0
     if tank < distance:
         cnt += 1 
         return cnt
