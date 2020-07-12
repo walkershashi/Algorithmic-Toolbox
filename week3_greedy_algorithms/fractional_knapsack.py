@@ -2,25 +2,28 @@
 import sys
 
 def get_optimal_value(capacity, weights, values):
-    value = 0.
-    # write your code here
+    val_per_wt = []
+    for i in range(len(weights)):
+        val_per_wt.append(values[i] / weights[i])
+    
+    value = 0
     for i in range(len(weights)):
         if capacity == 0:
             return value
-        val_per_wt = [values[i] / weights[i] for i in range(len(weights)) if weights[i] != 0]
-        max_val_wt = 0
-        index = 0
-        for i in range(len(val_per_wt)):
-            if val_per_wt[i] > max_val_wt:
-                max_val_wt = val_per_wt[i]
-                index = i
-        if weights[index] > 0 : 
-                min_ = min(weights[index], capacity)
-                value += max_val_wt * min_
-                weights[i] -= min_
-                capacity -= min_
-    return value
+    
+        max_index = val_per_wt.index(max(val_per_wt))
+        taken_amt = min(weights[max_index], capacity)
 
+        value += taken_amt * max(val_per_wt)
+        weights[max_index] -= taken_amt
+
+        if weights[max_index] == 0:
+            val_per_wt[max_index] = 0
+        else:
+            val_per_wt[max_index] -= weights[max_index]
+        
+        capacity -= taken_amt
+    return value
 
 if __name__ == "__main__":
     data = list(map(int, sys.stdin.read().split()))
